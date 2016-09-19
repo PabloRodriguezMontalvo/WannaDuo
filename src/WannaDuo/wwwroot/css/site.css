@@ -9,7 +9,14 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 22px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+    }
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
@@ -28,7 +35,10 @@ textarea {
 {
     width: 100%;
 }
-
+.row{
+  margin-top: 30px !important;
+    margin-bottom: 30px !important;
+}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
   /* Hide captions */

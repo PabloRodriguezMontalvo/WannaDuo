@@ -1,0 +1,161 @@
+﻿@using WannaDuo
+@model WannaDuo.Model.Entrada
+<link href="~/css/bootstrap-clockpicker.css" rel="stylesheet" />
+
+<h2>¡Juguemos!</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model=> model.player);
+    @Html.HiddenFor(model => model.hora_fin);
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+      
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div id="nick" class="form-group">
+            @Html.LabelFor(model => model.player, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Jugador",null, new { @class = "form-control " })
+                @*@Html.ValidationMessageFor(model => model.player, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tipo_partida, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Modo", null, "-Modo-", new { @class = "form-control", @required = "required" })
+                @Html.ValidationMessageFor(model => model.tipo_partida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.hora_fin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("Hora", null, new { @class = "form-control " })
+                @*@Html.EditorFor(model => model.hora_fin, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.hora_fin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.personaje_preferido, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownList("Campeones", null, "-Campeón-", new {@class = "form-control", @required = "required"})
+
+
+                @Html.ValidationMessageFor(model => model.personaje_preferido, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.server, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Server", null, "-Server-", new { @class = "form-control", @required = "required" })
+
+
+                @Html.ValidationMessageFor(model => model.server, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.idioma, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Idioma", null, "-Idioma-", new { @class = "form-control", @required = "required" })
+
+
+                @Html.ValidationMessageFor(model => model.idioma, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.posicion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Posicion", null, "-Posicion-", new { @class = "form-control", @required = "required" })
+
+
+                @Html.ValidationMessageFor(model => model.posicion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.notas, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.notas, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.notas, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.js" integrity="sha256-zKcnb5HjAt9sUd1E592XnCPT4b4A0Bft67eIb+YW/Eo=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" integrity="sha256-zDI1g6Yzr25YWykCOmTUeageF3RWaLnx+Ik8NqVk1xA=" crossorigin="anonymous" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js" integrity="sha256-xoE/2szqaiaaZh7goVyF5p9C/qBu9dM3V5utrQaiJMc=" crossorigin="anonymous"></script>
+@*<script src="~/js/jquery-clockpicker.js"></script>
+<script src="~/js/bootstrap-clockpicker.js"></script>*@
+<script src="~/js/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript">
+    $('#Hora').timepicker({
+        'minTime':new Date($.now()),
+     'step':20,
+        'showDuration': true,
+        'disableTextInput':true
+    });
+    //setup before functions
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 500;  //time in ms, 5 second for example
+    var $input = $('#Jugador');
+
+    //on keyup, start the countdown
+    $input.on('keyup', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown
+    $input.on('keydown', function () {
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTyping() {
+   
+      $.ajax(
+                {
+                    url: '@Url.Action("Buscar", "Home")',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    type: 'GET',
+                    cache: false,
+                    data: ({ "id": $("#Jugador").val() })
+                })
+                .done(function (res) {
+                    if(res!="")
+                        {
+                        $("#player").val(res);
+                        $("#nick").removeClass("has-error")
+                    $("#nick").addClass("has-success");
+                    }
+                    else
+                    {
+                        $("#nick").removeClass("has-success")
+                        $("#player").val(null);
+                        $("#nick").addClass("has-error");
+
+                    }
+                })
+                .fail(function () {
+                    $("#player").val(null);
+                    $("#nick").addClass("has-error");
+                });
+    }
+
+</script>

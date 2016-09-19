@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
+using WannaDuo.Model;
+using Microsoft.EntityFrameworkCore;
 namespace WannaDuo
 {
     public class Startup
     {
+         public string api { get;  }
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -28,6 +30,9 @@ namespace WannaDuo
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=WannaDuo;Trusted_Connection=True;";
+            services.AddDbContext<Contexto>(options => options.UseSqlServer(connection));
+
             services.AddMvc();
         }
 

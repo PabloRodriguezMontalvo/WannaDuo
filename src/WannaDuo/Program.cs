@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using RiotSharp;
 
 namespace WannaDuo
 {
@@ -19,6 +20,7 @@ namespace WannaDuo
                 .Build();
 
             host.Run();
+           
         }
     }
 }
