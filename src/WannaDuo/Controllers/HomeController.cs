@@ -20,7 +20,7 @@ namespace WannaDuo.Controllers
         public HomeController(Contexto context)
         {
             _context = context;
-           _rito = RiotApi.GetInstance("e822c187-091a-447c-ad09-ef938ca38425");
+           _rito = RiotApi.GetInstance("NO");
         }
 
         public IActionResult Inicio()
@@ -63,7 +63,7 @@ namespace WannaDuo.Controllers
         public IActionResult Nuevo()
         {
           
-            var api = "e822c187-091a-447c-ad09-ef938ca38425";
+            var api = "NO";
             var staticApi = StaticRiotApi.GetInstance(api);
         
             //  var modo = Enum.GetNames(typeof(Queue)).ToList();
