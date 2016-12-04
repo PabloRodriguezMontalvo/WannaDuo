@@ -4,27 +4,23 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 namespace WannaDuo.Model
 {
-    public class Contexto : DbContext
-    {
-        public Contexto(DbContextOptions<Contexto> options)
-            : base(options)
-        { }
-
-        public DbSet<Entrada> Entrada { get; set; }
-    
-    }
+   
     public class Entrada 
     {
         public int id { get; set; }
         [Display(ResourceType = typeof(Traducciones),
          Name = "soy")]
+        [Required]
         public long player { get; set; }
         [Display(ResourceType = typeof(Traducciones),
         Name = "horas")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        [DataType(DataType.Date)]
         public DateTime hora_fin { get; set; }
         [Display(ResourceType = typeof(Traducciones),
         Name = "prefe")]

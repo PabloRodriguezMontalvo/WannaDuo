@@ -1,14 +1,19 @@
 ﻿@using WannaDuo
 @model WannaDuo.Model.Entrada
-<link href="~/css/bootstrap-clockpicker.css" rel="stylesheet" />
+<link href="/static-content/css/bootstrap-clockpicker.css" rel="stylesheet" />
 
 <h2>¡Juguemos!</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frm", id = "frm" }))
 {
-    @Html.HiddenFor(model=> model.player);
+    @Html.HiddenFor(model => model.player);
+    @Html.HiddenFor(model=> model.personaje_preferido);
     @Html.HiddenFor(model => model.hora_fin);
+    @Html.HiddenFor(model => model.server);
+    @Html.HiddenFor(model => model.posicion);
+    @Html.HiddenFor(model => model.tipo_partida);
+    @Html.HiddenFor(model => model.idioma);
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
@@ -18,8 +23,10 @@
         <div id="nick" class="form-group">
             @Html.LabelFor(model => model.player, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox("Jugador",null, new { @class = "form-control " })
-                @*@Html.ValidationMessageFor(model => model.player, "", new { @class = "text-danger" })*@
+                @Html.TextBox("Jugador",null, new { @class = "form-control " }) @ViewBag.Palabro
+
+
+             @Html.ValidationMessageFor(model => model.player, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -52,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.server, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Server", null, "-Server-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("ServerC", null, "-Server-", new { @class = "form-control", @required = "required" })
 
 
                 @Html.ValidationMessageFor(model => model.server, "", new { @class = "text-danger" })
@@ -61,7 +68,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.idioma, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Idioma", null, "-Idioma-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("IdiomaC", null, "-Idioma-", new { @class = "form-control", @required = "required" })
 
 
                 @Html.ValidationMessageFor(model => model.idioma, "", new { @class = "text-danger" })
@@ -70,7 +77,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.posicion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Posicion", null, "-Posicion-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("PosicionC", null, "-Posicion-", new { @class = "form-control", @required = "required" })
 
 
                 @Html.ValidationMessageFor(model => model.posicion, "", new { @class = "text-danger" })
@@ -97,18 +104,66 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.js" integrity="sha256-zKcnb5HjAt9sUd1E592XnCPT4b4A0Bft67eIb+YW/Eo=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" integrity="sha256-zDI1g6Yzr25YWykCOmTUeageF3RWaLnx+Ik8NqVk1xA=" crossorigin="anonymous" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js" integrity="sha256-xoE/2szqaiaaZh7goVyF5p9C/qBu9dM3V5utrQaiJMc=" crossorigin="anonymous"></script>
-@*<script src="~/js/jquery-clockpicker.js"></script>
-<script src="~/js/bootstrap-clockpicker.js"></script>*@
-<script src="~/js/jquery.unobtrusive-ajax.js"></script>
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" integrity="sha256-zDI1g6Yzr25YWykCOmTUeageF3RWaLnx+Ik8NqVk1xA=" crossorigin="anonymous" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js" integrity="sha256-xoE/2szqaiaaZh7goVyF5p9C/qBu9dM3V5utrQaiJMc=" crossorigin="anonymous"></script>*@
+
+
+<script src="/static-content/js/bootstrap-clockpicker.js"></script>
+<script src="/static-content/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="/static-content/js/jquery.unobtrusive-ajax.js"></script>
 <script type="text/javascript">
-    $('#Hora').timepicker({
-        'minTime':new Date($.now()),
-     'step':20,
-        'showDuration': true,
-        'disableTextInput':true
+    var entrada = true;
+    jQuery.validator.addMethod("ClaveIncorrecta",  function (value, element) {
+        return (entrada == true);
+    }, "Clave incorrecta");
+
+    jQuery.validator.addMethod("invocadorEncontrado", function (value, element) {
+        return ($("#player").val() != null && $("#player").val() != "");
+    }, "Invocador no encontrado");
+    $('#frm').validate({
+        rules: {
+            Jugador: {
+                invocadorEncontrado: true,
+                ClaveIncorrecta: true,
+                required: true
+            }
+        }
     });
+  
+    $('#Campeones').change(function() {
+        $('#personaje_preferido').val($("#Campeones option:selected").index());
+    });
+    $('#ServerC').change(function () {
+        $('#server').val($("#ServerC option:selected").index());
+    });
+    $('#Modo').change(function () {
+        $('#tipo_partida').val($("#Modo option:selected").index());
+    });
+    $('#IdiomaC').change(function () {
+        $('#idioma').val($("#IdiomaC option:selected").index());
+    });
+    $('#PosicionC').change(function () {
+        $('#posicion').val($("#PosicionC option:selected").index());
+    });
+    $('#Hora')
+        .clockpicker({
+            autoclose: true,
+            afterDone: function() {
+
+                
+                //var horas_seleccionadas = moment($('#Hora').val(),
+                //"hh:mm");
+                var horasyminutos = $('#Hora').val().split(":");
+                var ahora_fin = moment();
+                var jaja = ahora_fin.utcOffset();
+                ahora_fin.add(horasyminutos[0], 'hours');
+                ahora_fin.add(horasyminutos[1], 'minutes');
+             
+                $('#hora_fin').val((ahora_fin.format()));
+              
+            }
+        });
+ 
     //setup before functions
     var typingTimer;                //timer identifier
     var doneTypingInterval = 500;  //time in ms, 5 second for example
@@ -124,38 +179,59 @@
     $input.on('keydown', function () {
         clearTimeout(typingTimer);
     });
-
+    $('#Jugador').validate({
+        rules: {
+            amount: { greaterThanZero: true }
+        }
+    });
     //user is "finished typing," do something
     function doneTyping() {
-   
-      $.ajax(
-                {
-                    url: '@Url.Action("Buscar", "Home")',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    type: 'GET',
-                    cache: false,
-                    data: ({ "id": $("#Jugador").val() })
-                })
-                .done(function (res) {
-                    if(res!="")
-                        {
-                        $("#player").val(res);
-                        $("#nick").removeClass("has-error")
-                    $("#nick").addClass("has-success");
-                    }
-                    else
-                    {
-                        $("#nick").removeClass("has-success")
-                        $("#player").val(null);
-                        $("#nick").addClass("has-error");
+        $(document).ajaxStart(function () {
+            $("#wait").css("display", "block");
+        });
 
-                    }
-                })
-                .fail(function () {
+        $(document).ajaxComplete(function () {
+            $("#wait").css("display", "none");
+        });
+        $.ajax(
+            {
+                url: '@Url.Action("Buscar", "Home")',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                type: 'GET',
+                cache: false,
+                data: ({ "id": $("#Jugador").val() })
+            })
+            .done(function (res) {
+                if(res!="")
+                {
+                    $("#nick").removeClass("has-error");
+                    $("#nick").addClass("has-success");
+                    $("#player").val(res);
+                    clave = true;
+
+                
+                }
+                else if (res == "ErrorClave") {
+                    $("#nick").addClass("has-error");
+                    $("#nick").removeClass("has-success");
+                    $("#player").val(null);
+                    clave = false;
+
+                }
+                else {
+                    $("#nick").removeClass("has-success");
                     $("#player").val(null);
                     $("#nick").addClass("has-error");
-                });
+              
+
+                }
+            })
+            .fail(function () {
+                $("#player").val(null);
+                $("#nick").addClass("has-error");
+            
+            });
     }
 
 </script>

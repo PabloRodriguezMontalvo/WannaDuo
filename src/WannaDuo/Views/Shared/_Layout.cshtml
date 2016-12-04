@@ -6,25 +6,25 @@
     <title>@ViewData["Title"] - WannaDuo</title>
 
     <environment names="Development">
-        <link rel="stylesheet" href="~/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/gsdk.css" />
-        <link rel="stylesheet" href="~/css/site.css"/>
-        <link href="~/css/jquery.localizationTool.css" rel="stylesheet" />
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <link rel="stylesheet" href="/static-content/css/bootstrap.css"  runat="server"/>
+        <link rel="stylesheet" href="/static-content/css/gsdk.css" />
+        <link rel="stylesheet" href="/static-content/css/site.css"/>
+        <link href="/static-content/css/jquery.localizationTool.css" rel="stylesheet" />
+        <script src="/static-content/lib/jquery/dist/jquery.js"></script>
+        <script src="/static-content/js/bootstrap.js"></script>
+        <script src="/static-content/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         @*<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-href="/static-content/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />*@
-        <link rel="stylesheet" href="~/css/bootstrap.css"
-              asp-fallback-href="~/css/bootstrap.css"
+        <link rel="stylesheet" href="/static-content/css/bootstrap.css"
+              asp-fallback-href="/static-content/css/bootstrap.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
-        <link rel="stylesheet" href="~/css/gsdk.css"
-              asp-fallback-href="~/css/gsdk.css"
+        <link rel="stylesheet" href="/static-content/css/gsdk.css"
+              asp-fallback-href="/static-content/css/gsdk.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="/static-content/css/site.min.css" asp-append-version="true" />
   
     </environment>
 </head>
@@ -58,28 +58,30 @@
     </div>
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="/static-content/lib/jquery/dist/jquery.js"></script>
+        <script src="/static-content/js/bootstrap.js"></script>
+        <script src="/static-content/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
        
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-src="/static-content/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
-        <script src="~/js/bootstrap.js"
-                asp-fallback-src="~/js/bootstrap.js"
+        <script src="/static-content/js/bootstrap.js"
+                asp-fallback-src="/static-content/js/bootstrap.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/get-shit-done.js"></script>
-        <script src="~/js/gsdk-radio.js"></script>
-        <script src="~/js/gsdk-morphing.js"></script>
-        <script src="~/js/gsdk-checkbox.js"></script>
-        <script src="~/js/gsdk-bootstrapswitch.js"></script>
+        <script src="/static-content/js/site.min.js" asp-append-version="true"></script>
+        <script src="/static-content/js/get-shit-done.js"></script>
+        <script src="/static-content/js/gsdk-radio.js"></script>
+        <script src="/static-content/js/gsdk-morphing.js"></script>
+        <script src="/static-content/js/gsdk-checkbox.js"></script>
+        <script src="/static-content/js/gsdk-bootstrapswitch.js"></script>
 
-        <script src="~/js/jquery.localizationTool.js"></script>
+        <script src="/static-content/js/jquery.localizationTool.js"></script>
+        <script src="/static-content/js/moment-with-locales.js"></script>
+          <script src="/static-content/lib/jquery-validation/dist/jquery.validate.js"></script>
     </environment>
 
     @RenderSection("scripts", required: false)

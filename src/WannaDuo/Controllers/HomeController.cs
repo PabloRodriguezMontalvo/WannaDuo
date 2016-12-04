@@ -1,51 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using RiotSharp;
 using RiotSharp.StaticDataEndpoint;
+using RiotSharp.StaticDataEndpoint.Champion.Enums;
+using WannaDuo.Migrations;
 using WannaDuo.Model;
-using Newtonsoft.Json;
-using System.Globalization;
+using WannaDuo.Repository;
+using WannaDuo.Services;
 
 namespace WannaDuo.Controllers
 {
     public class HomeController : Controller
     {
-        private Contexto _context;
-        private RiotApi _rito;
-        public HomeController(Contexto context)
+        private readonly IRepositoryBase<Entrada> _context;
+        public string _clave { get; set; }
+        private readonly string k = "e822c187-091a-447c-ad09-ef938ca38425";
+        private readonly RiotApi _rito;
+        private readonly Claves _claves;
+        private readonly StaticRiotApi _staticApi;
+
+        public HomeController(IRepositoryBase<Entrada> context)
         {
             _context = context;
-           _rito = RiotApi.GetInstance("e822c187-091a-447c-ad09-ef938ca38425");
+            _rito = RiotApi.GetInstance(k);
+        _claves=new Claves(new HttpContextAccessor());
+            _staticApi = StaticRiotApi.GetInstance(k);
+          
         }
 
         public IActionResult Inicio()
         {
-           
             return View();
         }
-       
-        [HttpGet]  
-        public ActionResult Buscar(string id)
+     
+        [HttpGet]
+        public IActionResult Buscar(string id)
         {
             try
             {
                 var id_invocador = _rito.GetSummoner(Region.euw, id);
-                return Json(id_invocador.Id);
+                var listadeuno = new List<long>();
+                listadeuno.Add(id_invocador.Id);
+                var paginas = _rito.GetMasteryPages(Region.euw, listadeuno);
+                var a = paginas.SelectMany(o => o.Value).ToList();
+                var nombre = a[0].Name;
+                var clave = _claves.ComprobarClave();
+                if (nombre == clave)
+                    return Json(id_invocador.Id);
+                return NotFound();
             }
             catch (Exception)
             {
-
-                return Json("");
+                return NotFound();
             }
-          
-           
-        
         }
+        
 
         private List<string> Gamemode()
         {
@@ -60,20 +74,17 @@ namespace WannaDuo.Controllers
 
             return lista;
         }
+
         public IActionResult Nuevo()
         {
-          
-            var api = "e822c187-091a-447c-ad09-ef938ca38425";
-            var staticApi = StaticRiotApi.GetInstance(api);
-        
-            //  var modo = Enum.GetNames(typeof(Queue)).ToList();
-            var modo = Gamemode();
-
+            var clave = _claves.DameClave();
+            var modo = Enum.GetNames(typeof(Queue)).ToList();
+            //     var modo = Gamemode();
 
 
             var idioma = Enum.GetNames(typeof(Language)).ToList();
             var server = Enum.GetNames(typeof(Region)).ToList();
-            var lista_idiomas= new List<string>();
+            var lista_idiomas = new List<string>();
             foreach (var i in idioma)
             {
                 var rep = i.Replace("_", "-");
@@ -81,36 +92,109 @@ namespace WannaDuo.Controllers
                 try
                 {
                     var idiomanombre = new CultureInfo(rep).DisplayName;
-                    if(new CultureInfo(rep).KeyboardLayoutId== new CultureInfo(rep).LCID)
-                      lista_idiomas.Add(idiomanombre);
+                    if (new CultureInfo(rep).Name == new CultureInfo(rep).NativeName)
+                        lista_idiomas.Add(idiomanombre);
                 }
                 catch (Exception)
                 {
-
-
-
                 }
             }
 
             var posicion = Enum.GetNames(typeof(TagStatic)).ToList();
             //  var Campeones = staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions.ToList();
-            ViewBag.Campeones = new SelectList(staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions, "Value", "Key").ToList().OrderBy(o=>o.Text);
+            ViewBag.Campeones =
+                new SelectList(_staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions,
+                    "Value", "Key").ToList().OrderBy(o => o.Text);
             ViewBag.Modo = new SelectList(modo);
-            ViewBag.Idioma = new SelectList(lista_idiomas);
-            ViewBag.Posicion = new SelectList(posicion);
-            ViewBag.Server = new SelectList(server);
+            ViewBag.IdiomaC = new SelectList(lista_idiomas);
+            ViewBag.PosicionC = new SelectList(posicion);
+            ViewBag.ServerC = new SelectList(server);
+            ViewBag.Palabro = clave;
             return View(new Entrada());
         }
+
+        [HttpPost]
+        public IActionResult Nuevo(Entrada registroEntrada)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Insert(registroEntrada);
+                return RedirectToAction("Index");
+            }
+            var idioma = Enum.GetNames(typeof(Language)).ToList();
+            var server = Enum.GetNames(typeof(Region)).ToList();
+            var lista_idiomas = new List<string>();
+            foreach (var i in idioma)
+            {
+                var rep = i.Replace("_", "-");
+
+                try
+                {
+                    var idiomanombre = new CultureInfo(rep).DisplayName;
+                    if (new CultureInfo(rep).Name == new CultureInfo(rep).NativeName)
+                        lista_idiomas.Add(idiomanombre);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            var modo = Gamemode();
+            var posicion = Enum.GetNames(typeof(TagStatic)).ToList();
+            ViewBag.Campeones =
+                new SelectList(_staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions,
+                    "Value", "Key").ToList().OrderBy(o => o.Text);
+            ViewBag.Modo = new SelectList(modo);
+            ViewBag.IdiomaC = new SelectList(lista_idiomas);
+            ViewBag.PosicionC = new SelectList(posicion);
+            ViewBag.ServerC = new SelectList(server);
+            return View(registroEntrada);
+            //var api = "e822c187-091a-447c-ad09-ef938ca38425";
+            //var staticApi = StaticRiotApi.GetInstance(api);
+
+            ////  var modo = Enum.GetNames(typeof(Queue)).ToList();
+            //var modo = Gamemode();
+
+
+            //var idioma = Enum.GetNames(typeof(Language)).ToList();
+            //var server = Enum.GetNames(typeof(Region)).ToList();
+            //var lista_idiomas = new List<string>();
+            //foreach (var i in idioma)
+            //{
+            //    var rep = i.Replace("_", "-");
+
+            //    try
+            //    {
+            //        var idiomanombre = new CultureInfo(rep).DisplayName;
+            //        if (new CultureInfo(rep).KeyboardLayoutId == new CultureInfo(rep).LCID)
+            //            lista_idiomas.Add(idiomanombre);
+            //    }
+            //    catch (Exception)
+            //    {
+
+
+            //    }
+            //}
+
+            //var posicion = Enum.GetNames(typeof(TagStatic)).ToList();
+            ////  var Campeones = staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions.ToList();
+            //ViewBag.Campeones = new SelectList(staticApi.GetChampions(Region.euw, ChampionData.image, Language.es_ES).Champions, "Value", "Key").ToList().OrderBy(o => o.Text);
+            //ViewBag.Modo = new SelectList(modo);
+            //ViewBag.Idioma = new SelectList(lista_idiomas);
+            //ViewBag.Posicion = new SelectList(posicion);
+            //ViewBag.Server = new SelectList(server);
+            //return View(new Entrada());
+        }
+
         public IActionResult Index()
         {
             // Aqui vamos a hacer los calculos de los jugadores que quieren jugar en este momento.
-            var contador = _context.Entrada.Count();
-            var lista= _context.Entrada.ToList();
+            var contador = _context.FindAll().Count();
+            var lista = _context.FindAll().ToList();
 
             ViewBag.Contador = contador;
             return View(lista);
         }
-       
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
