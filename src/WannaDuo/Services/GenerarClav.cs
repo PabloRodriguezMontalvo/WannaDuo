@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WannaDuo.Services
 {
-    public class Claves
+    public  class Claves
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private ISession _session => _httpContextAccessor.HttpContext.Session;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+        //private ISession _session => _httpContextAccessor.HttpContext.Session;
 
-        public Claves(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
+        //public Claves(/*IHttpContextAccessor httpContextAccessor*/)
+        //{
+        //    //_httpContextAccessor = httpContextAccessor;
 
-        }
-        private void Clave()
+        //}
+        private  string Clave()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var stringChars = new char[8];
@@ -29,20 +29,23 @@ namespace WannaDuo.Services
             }
 
             var finalString = new String(stringChars);
-            _session.SetString("Clave", finalString);
+            return finalString;
+            //_session.SetString("Clave", finalString);
         }
 
-        public string DameClave()
+        public  string DameClave()
         {
 
-            Clave();
-           return _session.GetString("Clave").ToString();
+           return Clave();
+       //return     HttpContext.Session.GetString("Clave");
+            //return _session.GetString("Clave").ToString();
         }
 
-        public string ComprobarClave()
-        {
-            return _session.GetString("Clave").ToString();
-        }
+        //public string ComprobarClave()
+        //{
+        //    //  return _session.GetString("Clave").ToString();
+        //    return HttpContext.Session.GetString("Clave");
+        //}
 
 
 

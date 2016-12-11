@@ -1,100 +1,106 @@
-﻿@using WannaDuo
-@model WannaDuo.Model.Entrada
-<link href="/static-content/css/bootstrap-clockpicker.css" rel="stylesheet" />
+﻿@model WannaDuo.Model.Entrada
+<link href="/static-content/css/bootstrap-clockpicker.css" rel="stylesheet"/>
 
 <h2>¡Juguemos!</h2>
 
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { name = "frm", id = "frm" }))
+@using (Html.BeginForm(null, null, FormMethod.Post, new {name = "frm", id = "frm"}))
 {
-    @Html.HiddenFor(model => model.player);
-    @Html.HiddenFor(model=> model.personaje_preferido);
-    @Html.HiddenFor(model => model.hora_fin);
-    @Html.HiddenFor(model => model.server);
-    @Html.HiddenFor(model => model.posicion);
-    @Html.HiddenFor(model => model.tipo_partida);
-    @Html.HiddenFor(model => model.idioma);
+    @Html.HiddenFor(model => model.player)
+    ;
+    @Html.HiddenFor(model => model.personaje_preferido)
+    ;
+    @Html.HiddenFor(model => model.hora_fin)
+    ;
+    @Html.HiddenFor(model => model.server)
+    ;
+    @Html.HiddenFor(model => model.posicion)
+    ;
+    @Html.HiddenFor(model => model.tipo_partida)
+    ;
+    @Html.HiddenFor(model => model.idioma)
+    ;
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-      
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         <div id="nick" class="form-group">
-            @Html.LabelFor(model => model.player, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.player, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.TextBox("Jugador",null, new { @class = "form-control " }) @ViewBag.Palabro
+                @Html.TextBox("Jugador", null, new {@class = "form-control "}) @ViewBag.Palabro
+            <a href="#" id="CheckAgain">Comprobar de nuevo</a>
 
-
-             @Html.ValidationMessageFor(model => model.player, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.player, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.tipo_partida, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.tipo_partida, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("Modo", null, "-Modo-", new { @class = "form-control", @required = "required" })
-                @Html.ValidationMessageFor(model => model.tipo_partida, "", new { @class = "text-danger" })
+                @Html.DropDownList("Modo", null, "-Modo-", new {@class = "form-control", required = "required"})
+                @Html.ValidationMessageFor(model => model.tipo_partida, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.hora_fin, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.hora_fin, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.TextBox("Hora", null, new { @class = "form-control " })
+                @Html.TextBox("Hora", null, new {@class = "form-control "})
                 @*@Html.EditorFor(model => model.hora_fin, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.ValidationMessageFor(model => model.hora_fin, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.hora_fin, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.personaje_preferido, htmlAttributes: new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.personaje_preferido, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("Campeones", null, "-Campeón-", new {@class = "form-control", @required = "required"})
+                @Html.DropDownList("Campeones", null, "-Campeón-", new {@class = "form-control", required = "required"})
 
 
                 @Html.ValidationMessageFor(model => model.personaje_preferido, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.server, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.server, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("ServerC", null, "-Server-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("ServerC", null, "-Server-", new {@class = "form-control", required = "required"})
 
 
-                @Html.ValidationMessageFor(model => model.server, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.server, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.idioma, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.idioma, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("IdiomaC", null, "-Idioma-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("IdiomaC", null, "-Idioma-", new {@class = "form-control", required = "required"})
 
 
-                @Html.ValidationMessageFor(model => model.idioma, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.idioma, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.posicion, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.posicion, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.DropDownList("PosicionC", null, "-Posicion-", new { @class = "form-control", @required = "required" })
+                @Html.DropDownList("PosicionC", null, "-Posicion-", new {@class = "form-control", required = "required"})
 
 
-                @Html.ValidationMessageFor(model => model.posicion, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.posicion, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.notas, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.notas, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.notas, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.notas, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.notas, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.notas, "", new {@class = "text-danger"})
             </div>
         </div>
-    
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default"/>
             </div>
         </div>
     </div>
@@ -112,45 +118,61 @@
 <script src="/static-content/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="/static-content/js/jquery.unobtrusive-ajax.js"></script>
 <script type="text/javascript">
-    var entrada = true;
-    jQuery.validator.addMethod("ClaveIncorrecta",  function (value, element) {
-        return (entrada == true);
-    }, "Clave incorrecta");
+    //var entrada = true;
+    //jQuery.validator.addMethod("ClaveIncorrecta",
+    //    function(value, element) {
+    //        return (entrada == true);
+    //    },
+    //    "Clave incorrecta");
 
-    jQuery.validator.addMethod("invocadorEncontrado", function (value, element) {
-        return ($("#player").val() != null && $("#player").val() != "");
-    }, "Invocador no encontrado");
-    $('#frm').validate({
-        rules: {
-            Jugador: {
-                invocadorEncontrado: true,
-                ClaveIncorrecta: true,
-                required: true
-            }
-        }
+    //jQuery.validator.addMethod("invocadorEncontrado",
+    //    function(value, element) {
+    //        return ($("#player").val() != null && $("#player").val() != "" && $("#player").val() != undefined);
+    //    },
+    //    "Invocador no encontrado");
+    //$('#frm')
+    //    .validate({
+    //        rules: {
+    //            Jugador: {
+    //                invocadorEncontrado: true,
+    //                ClaveIncorrecta: true,
+    //                required: true
+    //            }
+    //        }
+    //    });
+
+    $('#Campeones')
+        .change(function() {
+            $('#personaje_preferido').val($("#Campeones option:selected").index());
+        });
+    $('#ServerC')
+        .change(function() {
+            $('#server').val($("#ServerC option:selected").index());
+        });
+    $('#Modo')
+        .change(function() {
+            $('#tipo_partida').val($("#Modo option:selected").index());
+        });
+    $('#IdiomaC')
+        .change(function() {
+            $('#idioma').val($("#IdiomaC option:selected").index());
+        });
+    $('#PosicionC')
+        .change(function() {
+            $('#posicion').val($("#PosicionC option:selected").index());
+        });
+    $("#CheckAgain").click(function (e) {
+
+        e.preventDefault();
+        doneTyping();
     });
-  
-    $('#Campeones').change(function() {
-        $('#personaje_preferido').val($("#Campeones option:selected").index());
-    });
-    $('#ServerC').change(function () {
-        $('#server').val($("#ServerC option:selected").index());
-    });
-    $('#Modo').change(function () {
-        $('#tipo_partida').val($("#Modo option:selected").index());
-    });
-    $('#IdiomaC').change(function () {
-        $('#idioma').val($("#IdiomaC option:selected").index());
-    });
-    $('#PosicionC').change(function () {
-        $('#posicion').val($("#PosicionC option:selected").index());
-    });
+
     $('#Hora')
         .clockpicker({
             autoclose: true,
             afterDone: function() {
 
-                
+
                 //var horas_seleccionadas = moment($('#Hora').val(),
                 //"hh:mm");
                 var horasyminutos = $('#Hora').val().split(":");
@@ -158,41 +180,42 @@
                 var jaja = ahora_fin.utcOffset();
                 ahora_fin.add(horasyminutos[0], 'hours');
                 ahora_fin.add(horasyminutos[1], 'minutes');
-             
+
                 $('#hora_fin').val((ahora_fin.format()));
-              
+
             }
         });
- 
+
     //setup before functions
-    var typingTimer;                //timer identifier
-    var doneTypingInterval = 500;  //time in ms, 5 second for example
+    var typingTimer; //timer identifier
+    var doneTypingInterval = 500; //time in ms, 5 second for example
     var $input = $('#Jugador');
 
     //on keyup, start the countdown
-    $input.on('keyup', function () {
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
+    $input.on('keyup',
+        function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        });
 
     //on keydown, clear the countdown
-    $input.on('keydown', function () {
-        clearTimeout(typingTimer);
-    });
-    $('#Jugador').validate({
-        rules: {
-            amount: { greaterThanZero: true }
-        }
-    });
-    //user is "finished typing," do something
-    function doneTyping() {
-        $(document).ajaxStart(function () {
-            $("#wait").css("display", "block");
+    $input.on('keydown',
+        function() {
+            clearTimeout(typingTimer);
         });
 
-        $(document).ajaxComplete(function () {
-            $("#wait").css("display", "none");
-        });
+
+    //user is "finished typing," do something
+    function doneTyping() {
+        $(document)
+            .ajaxStart(function() {
+                $("#wait").css("display", "block");
+            });
+
+        $(document)
+            .ajaxComplete(function() {
+                $("#wait").css("display", "none");
+            });
         $.ajax(
             {
                 url: '@Url.Action("Buscar", "Home")',
@@ -202,35 +225,41 @@
                 cache: false,
                 data: ({ "id": $("#Jugador").val() })
             })
-            .done(function (res) {
-                if(res!="")
-                {
-                    $("#nick").removeClass("has-error");
-                    $("#nick").addClass("has-success");
-                    $("#player").val(res);
-                    clave = true;
+            .done(function(res) {
+                $.ajax(
+                    {
+                        url: '@Url.Action("CheckMasterieName", "Home")',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        type: 'GET',
+                        cache: false,
+                        data: ({ "id": res.toString() })
+                    })
+                    .done(function(res) {
 
-                
-                }
-                else if (res == "ErrorClave") {
-                    $("#nick").addClass("has-error");
-                    $("#nick").removeClass("has-success");
-                    $("#player").val(null);
-                    clave = false;
+                        $("#nick").removeClass("has-warning");
+                        $("#nick").addClass("has-success");
+                        $("#player").val(res);
+                   
 
-                }
-                else {
-                    $("#nick").removeClass("has-success");
-                    $("#player").val(null);
-                    $("#nick").addClass("has-error");
-              
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status == 404) {
+                            $("#player").val(null);
+                            $("#nick").removeClass("has-success");
+                            $("#nick").addClass("has-warning");
+                        }
 
-                }
+                    });
+
             })
-            .fail(function () {
-                $("#player").val(null);
-                $("#nick").addClass("has-error");
-            
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 404) {
+                    $("#player").val(null);
+                    $("#nick").removeClass("has-success");
+                    $("#nick").addClass("has-error");
+                }
+
             });
     }
 

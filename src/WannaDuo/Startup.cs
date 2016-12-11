@@ -39,6 +39,8 @@ namespace WannaDuo
             services.AddDbContext<Contexto>(options => options.UseSqlServer(Configuration.GetConnectionString("ContextoSQL")));
             services.AddMvc();
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+         
+
             services.AddSession();
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();

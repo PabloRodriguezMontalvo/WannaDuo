@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,7 @@ namespace WannaDuo.Controllers
         {
             _context = context;
             _rito = RiotApi.GetInstance(k);
-        _claves=new Claves(new HttpContextAccessor());
+        _claves=new Claves();
             _staticApi = StaticRiotApi.GetInstance(k);
           
         }
@@ -44,22 +45,51 @@ namespace WannaDuo.Controllers
             try
             {
                 var id_invocador = _rito.GetSummoner(Region.euw, id);
-                var listadeuno = new List<long>();
-                listadeuno.Add(id_invocador.Id);
-                var paginas = _rito.GetMasteryPages(Region.euw, listadeuno);
-                var a = paginas.SelectMany(o => o.Value).ToList();
-                var nombre = a[0].Name;
-                var clave = _claves.ComprobarClave();
-                if (nombre == clave)
-                    return Json(id_invocador.Id);
-                return NotFound();
+                if (id_invocador == null)
+                {
+                    return NotFound();
+                }
+                return Json(id_invocador.Id) ;
+             
+              
             }
             catch (Exception)
             {
                 return NotFound();
             }
         }
-        
+        [HttpGet]
+        public IActionResult CheckMasterieName(long id)
+        {
+            var nombre = GetFirstMasteriePageName(id);
+            if (HttpContext.Session.GetString("Clave") != null)
+            {
+                var clave = HttpContext.Session.GetString("Clave");
+                if (nombre == clave)
+                    return Json(id);
+                return NotFound();
+            }
+          
+            return NotFound();
+        }
+        [HttpGet]
+        public string GetFirstMasteriePageName(long id)
+        {
+            if (id!=0)
+            {
+                var listadeuno = new List<long>();
+                listadeuno.Add((id));
+                var paginas = _rito.GetMasteryPages(Region.euw, listadeuno);
+                var a = paginas.SelectMany(o => o.Value).ToList();
+                return a[0].Name;
+            }
+            else
+            {
+                return NotFound().ToString();
+            }
+          
+           
+        }
 
         private List<string> Gamemode()
         {
@@ -78,6 +108,7 @@ namespace WannaDuo.Controllers
         public IActionResult Nuevo()
         {
             var clave = _claves.DameClave();
+            HttpContext.Session.SetString("Clave", clave);
             var modo = Enum.GetNames(typeof(Queue)).ToList();
             //     var modo = Gamemode();
 
@@ -92,7 +123,7 @@ namespace WannaDuo.Controllers
                 try
                 {
                     var idiomanombre = new CultureInfo(rep).DisplayName;
-                    if (new CultureInfo(rep).Name == new CultureInfo(rep).NativeName)
+                
                         lista_idiomas.Add(idiomanombre);
                 }
                 catch (Exception)
@@ -205,7 +236,7 @@ namespace WannaDuo.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
+          
             return View();
         }
 
